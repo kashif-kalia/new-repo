@@ -1,9 +1,9 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: nginx-deployment
 spec:
-  replicas: 3  # Number of NGINX pods to run
+  replicas: 5  # Number of NGINX pods to run
   selector:
     matchLabels:
       app: nginx
@@ -17,3 +17,13 @@ spec:
         image: nginx:latest  # NGINX container image
         ports:
         - containerPort: 80  # Port the NGINX container listens on
+  strategy:
+    canary:
+      canaryService: nginx-service  # This field is optional we can remove too.
+        steps:  
+          - setWeight: 20
+          - pause:  
+             duration: "20"
+          - setWeight: 80
+          - pause: {}  
+      
