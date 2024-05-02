@@ -1,0 +1,29 @@
+firstly we will have to create a ec2 server then we will create SFTP server om ec2.
+
+sudo apt update
+sudo apt install openssh-server
+
+sudo adduser user1
+sudo adduser user2
+
+sudo mkdir /home/user1/files
+sudo mkdir /home/user2/files
+
+sudo chown root:root /home/user1
+sudo chown root:root /home/user2
+sudo chmod 755 /home/user1
+sudo chmod 755 /home/user2
+
+sudo nano /etc/ssh/sshd_config
+
+Match User user1
+    ChrootDirectory /home/user1
+    ForceCommand internal-sftp
+    AllowTcpForwarding no
+    X11Forwarding no
+
+Match User user2
+    ChrootDirectory /home/user2
+    ForceCommand internal-sftp
+    AllowTcpForwarding no
+    X11Forwarding no
